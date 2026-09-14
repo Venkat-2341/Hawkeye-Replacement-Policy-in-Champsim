@@ -13,6 +13,7 @@ OPTgen::OPTgen(size_t num_sets, size_t associativity, size_t history_multiplier)
 
 bool OPTgen::access(size_t set_idx, uint64_t address) {
     // return true if its hit and false for a miss 
+    occupancy_[set_idx][current_time_[set_idx] % history_length_] = 0;
     
     unordered_map<uint64_t, size_t> &mp = last_access_time_[set_idx];
     if (!mp.count(address)) {

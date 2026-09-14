@@ -1,6 +1,7 @@
 #include "hawkeye.h"
 #include <algorithm>
 #include "cache.h"
+#include "champsim.h"
 
 hawkeye::hawkeye(CACHE* cache) : hawkeye(cache, cache->NUM_SET, cache->NUM_WAY) {}
 
@@ -29,16 +30,19 @@ void hawkeye::replacement_cache_fill(uint32_t triggering_cpu, long set, long way
 void hawkeye::update_replacement_state(uint32_t triggering_cpu, long set, long way, champsim::address full_addr, champsim::address ip,
                                        champsim::address victim_addr, access_type type, uint8_t hit)
 {
-  if (type == access_type::WRITE) {
-    return;
-  }
+    if (type == access_type::WRITE) return;
 
-  bool opt_hit = optgen.access(static_cast<std::size_t>(set), full_addr.to<uint64_t>());
-  predictor.train(ip.to<uint64_t>(), opt_hit);
+    champsim::block_number block_addr{full_addr};
+    uint64_t block = block_addr.to<uint64_t>();
 
-  if (hit) {
-    bool friendly = predictor.predict(ip.to<uint64_t>());
-    Classification cls = friendly ? Classification::CACHE_FRIENDLY : Classification::CACHE_AVERSE;
-    update_rrpv(rrpv.at(static_cast<std::size_t>(set)), static_cast<std::size_t>(way), cls, /*is_hit=*/true);
-  }
+    bool opt_hit = optgen.access(static_cast<std::size_t>(set), block);
+
+    uint64_t train_pc = last_pc.count(block) ? last_pc[block] : ip.to<uint64_t>(); 
+    predictor.train(train_pc, opt_hit);
+    last_pc[block] = ip.to<uint64_t>();  
+    if (hit) {
+        bool friendly = predictor.predict(ip.to<uint64_t>());
+        Classification cls = friendly ? Classification::CACHE_FRIENDLY : Classification::CACHE_AVERSE;
+        update_rrpv(rrpv.at(static_cast<std::size_t>(set)), static_cast<std::size_t>(way), cls, /*is_hit=*/true);
+    }
 }
