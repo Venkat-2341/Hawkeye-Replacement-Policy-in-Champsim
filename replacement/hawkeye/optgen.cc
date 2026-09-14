@@ -64,3 +64,10 @@ bool OPTgen::access(size_t set_idx, uint64_t address) {
         else return false;
     }
 }
+
+bool OPTgen::has_recent_access(std::size_t set_idx, uint64_t address) const {
+    const auto& mp = last_access_time_[set_idx];
+    auto it = mp.find(address);
+    if (it == mp.end()) return false;
+    return (current_time_[set_idx] - it->second) < history_length_;
+}

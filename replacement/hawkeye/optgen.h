@@ -17,13 +17,14 @@ public:
  
     // Processes one access to `address`, mapped to set `set_idx`
     bool access(std::size_t set_idx, uint64_t address);
+    bool has_recent_access(std::size_t set_idx, uint64_t address) const;
  
 private:
     std::size_t num_sets_;
     std::size_t associativity_;      // W
-    std::size_t history_length_;     // 8W (or history_multiplier * W)
+    std::size_t history_length_;     
  
-    // occupancy_[set_idx][t % history_length_] has the number of live reuse intervals overlapping time = t. 
+    // occupancy_[set_idx][t % history_length_] has the  number of live reuse intervals overlapping time = t. 
     std::vector<std::vector<std::size_t>> occupancy_;
     std::vector<std::size_t> current_time_; // local to each set
     std::vector<std::unordered_map<uint64_t, std::size_t>> last_access_time_;
