@@ -7,9 +7,7 @@
 int main()
 {
     // --- Case 1: insertion policy ---
-    std::vector<int> rrpv = {
-        3, 3, 3, 3
-    };
+    std::vector<int> rrpv = {};
     update_rrpv(rrpv, 0, Classification::CACHE_AVERSE, /*is_hit=*/false);
     update_rrpv(rrpv, 1, Classification::CACHE_FRIENDLY, /*is_hit=*/false);
     for (int v : rrpv)

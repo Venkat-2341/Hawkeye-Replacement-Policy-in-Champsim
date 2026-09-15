@@ -9,32 +9,11 @@ int main() {
 
     // TEST_VECTOR_START
     // train_events: ordered (pc, opt_hit) pairs applied via pred.train(pc, opt_hit)
-    std::vector<std::pair<uint64_t, bool>> train_events = {
-        // {0x1000, true},
-        // {0x1000, true},
-        // {0x1000, true},
-        // {0x1000, true},
-        // {0x1000, true},
- 
-        // {0x2000, false},
-        // {0x2000, false},
-        // {0x2000, false},
-        // {0x2000, false},
-        // {0x2000, false},
- 
-        // {0x3000, true},
-        // {0x3000, true},
-        // {0x3000, false},
-    };
+    std::vector<std::pair<uint64_t, bool>> train_events = {};
     // query_pcs: pcs to print counter/prediction for, after all training is applied
 
 
-    std::vector<uint64_t> query_pcs = {
-        // 0x1000,  
-        // 0x2000,  
-        // 0x3000,  
-        // 0x4000,  
-    };
+    std::vector<uint64_t> query_pcs = {};
     // TEST_VECTOR_END
 
     for (auto& [pc, opt_hit] : train_events) {
