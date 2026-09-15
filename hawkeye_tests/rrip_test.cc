@@ -16,9 +16,7 @@ int main()
     std::cout << "victim: " << find_victim(rrpv) << "\n";
 
     // --- Case 2: find a victim ---
-    std::vector<int> rrpv2 = {
-        2, 5, 3, 4
-    };
+    std::vector<int> rrpv2 = {};
     std::size_t v = find_victim(rrpv2);
     for (int x : rrpv2)
         std::cout << x << " ";
